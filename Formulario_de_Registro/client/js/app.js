@@ -8,6 +8,14 @@ function validarFormulario() {
   const telefono = document.getElementById('input_telefono').value.trim();
   const email = document.getElementById('input_email').value.trim();
   const redes = document.getElementById('input_red_social').value.trim();
+  const formulario = document.getElementById('formulario')
+
+  formulario.addEventListener('submit', function(event) {
+    event.preventDefault(); // Esto evita la recarga/redirección
+  
+    // Aquí puedes validar, enviar datos con fetch/ajax, etc.
+    alert('Formulario enviado sin redirección');
+  });
 
   // Limpiar errores
   document.querySelectorAll('.error').forEach(el => el.textContent = '');
@@ -70,3 +78,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
