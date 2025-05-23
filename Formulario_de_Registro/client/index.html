@@ -1,22 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
-  <title>Document</title>
+  <title>Formulario</title>
 </head>
 <body>
   <div class="container-fluid d-flex min-vh-100 justify-content-center align-items-center p-0 m-0">
-    <div class="form-container mt-1 mb-1 p-2">
-      <label>Nombre</label>
-      <input placeholder="Nombre" id="input_nombre"/>
+    <form class="form-container row g-3 p-4 border rounded shadow bg-white">
+      <!-- Columna izquierda -->
+      <div class="col-md-6">
+        <label for="input_identificacion" class="form-label">Número de identificación</label>
+        <input type="text" class="form-control" id="input_identificacion" placeholder="Identificación" required>
 
-      <label>Apellido</label>
-      <input placeholder="Nombre" id="input_nombre"/>
-    </div>
+        <label for="input_nombre" class="form-label mt-2">Nombre</label>
+        <input type="text" class="form-control" id="input_nombre" placeholder="Nombre" required>
+
+        <label for="input_apellido" class="form-label mt-2">Apellido</label>
+        <input type="text" class="form-control" id="input_apellido" placeholder="Apellido" required>
+
+        <label for="input_email" class="form-label mt-2">Correo electrónico</label>
+        <input type="email" class="form-control" id="input_email" placeholder="nombre@ejemplo.com" required>
+      </div>
+
+      <!-- Columna derecha -->
+      <div class="col-md-6">
+        <label for="input_fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+        <input type="date" class="form-control" id="input_fecha_nacimiento" required>
+
+        <label for="input_telefono" class="form-label mt-2">Teléfono</label>
+        <input type="tel" class="form-control" id="input_telefono" placeholder="Teléfono" required>
+
+        <label for="input_genero" class="form-label mt-2">Género</label>
+        <select id="input_genero" class="form-select" required>
+          <option value="">Seleccione una opción</option>
+          <option value="Hombre">Hombre</option>
+          <option value="Mujer">Mujer</option>
+        </select>
+
+        <label for="input_red_social" class="form-label mt-2">Redes Sociales</label>
+        <input type="text" class="form-control" id="input_red_social" placeholder="Red Social" required>
+      </div>
+
+      <!-- Botón -->
+      <div class="col-12 text-end">
+        <button type="submit" class="btn btn-primary mt-3">Enviar</button>
+      </div>
+    </form>
   </div>
-  <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
