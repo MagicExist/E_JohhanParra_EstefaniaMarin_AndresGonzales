@@ -16,10 +16,10 @@
         <input type="text" class="form-control" id="input_identificacion" placeholder="Identificación" required>
 
         <label for="input_nombre" class="form-label mt-2">Nombre</label>
-        <input type="text" class="form-control" id="input_nombre" placeholder="Nombre" required>
+        <input type="text" class="form-control" id="input_nombre" oninput="this.value = this.value.replace(/[^a-zA-ZÁÉÍÓÚáéíóúñÑ\s]/g, '')" placeholder="Nombre" required>
 
         <label for="input_apellido" class="form-label mt-2">Apellido</label>
-        <input type="text" class="form-control" id="input_apellido" placeholder="Apellido" required>
+        <input type="text" class="form-control" id="input_apellido" oninput="this.value = this.value.replace(/[^a-zA-ZÁÉÍÓÚáéíóúñÑ\s]/g, '')" placeholder="Apellido" required>
 
         <label for="input_email" class="form-label mt-2">Correo electrónico</label>
         <input type="email" class="form-control" id="input_email" placeholder="nombre@ejemplo.com" required>

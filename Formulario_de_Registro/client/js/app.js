@@ -1,159 +1,72 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const baseUrl = 'http://localhost:3000/api/proyectos/tipos';
-    const btnListar = document.getElementById('btn-listar');
-    const btnCrear = document.getElementById('btn-crear');
-    const btnActualizar = document.getElementById('btn-actualizar');
-    const btnEliminar = document.getElementById('btn-eliminar');
-    const proyectoForm = document.getElementById('proyecto-form');
-    const statusCodeElement = document.getElementById('status-code');
-    const responseMessageElement = document.getElementById('response-message');
-  
-    function showResponse(statusCode, message) {
-      statusCodeElement.textContent = statusCode;
-  
-      if (statusCode >= 200 && statusCode < 300) {
-        statusCodeElement.style.color = 'green';
-      } else if (statusCode >= 400 && statusCode < 500) {
-        statusCodeElement.style.color = 'orange';
-      } else if (statusCode >= 500) {
-        statusCodeElement.style.color = 'red';
-      } else {
-        statusCodeElement.style.color = 'black';
-      }
-  
-      responseMessageElement.textContent = typeof message === 'object'
-        ? JSON.stringify(message, null, 2)
-        : message;
-    }
-  
-    function validarCampos() {
-      const id = document.getElementById('id').value.trim();
-      const codigo = document.getElementById('codigo').value.trim();
-      const abreviatura = document.getElementById('abreviatura').value.trim();
-      const descripcion = document.getElementById('descripcion').value.trim();
-      const fecha_registro  = document.getElementById('fecha_registro').value.trim();
-  
+function validarFormulario() {
+  let esValido = true;
 
-      if (!/^\d{8}$/.test(codigo)) {
-        alert('El código debe contener exactamente 8 dígitos numéricos.');
-        return false;
-      }
-  
-      if (abreviatura.length !== 6) {
-        alert('La abreviatura debe contener exactamente 6 caracteres.');
-        return false;
-      }
-  
-      if (!descripcion) {
-        alert('La descripción no puede estar vacía.');
-        return false;
-      }
-  
-      if (!fecha_registro ) {
-        alert('La fecha_registro  de registro no puede estar vacía.');
-        return false;
-      }
-  
-      return true;
+  const nombre = document.getElementById('input_nombre').value.trim();
+  const apellido = document.getElementById('input_apellido').value.trim();
+  const identificacion = document.getElementById('input_identificacion').value.trim();
+  const fecha = document.getElementById('input_fecha_nacimiento').value.trim();
+  const telefono = document.getElementById('input_telefono').value.trim();
+  const email = document.getElementById('input_email').value.trim();
+  const redes = document.getElementById('input_red_social').value.trim();
+
+  // Limpiar errores
+  document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+  // Validar nombre
+  if (!nombre || !/^[a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+$/.test(nombre)) {
+    document.getElementById('errorNombre').textContent = 'Ingrese solo letras y no deje vacío.';
+    esValido = false;
+  }
+
+  if (!apellido || !/^[a-zA-ZÁÉÍÓÚáéíóúñÑ\s]+$/.test(apellido)) {
+    document.getElementById('errorApellido').textContent = 'Ingrese solo letras y no deje vacío.';
+    esValido = false;
+  }
+  // Validar identificación
+  if (!identificacion || !/^\d+$/.test(identificacion)) {
+    document.getElementById('errorIdentificacion').textContent = 'Solo números y no puede estar vacío.';
+    esValido = false;
+  }
+
+  // Validar fecha (formato DD/MM/YYYY)
+  if (!fecha || !/^\d{2}\/\d{2}\/\d{4}$/.test(fecha)) {
+    document.getElementById('errorFecha').textContent = 'Formato inválido (DD/MM/YYYY).';
+    esValido = false;
+  }
+
+  // Validar teléfono
+  if (!telefono || !/^\d+$/.test(telefono)) {
+    document.getElementById('errorTelefono').textContent = 'Solo números y no puede estar vacío.';
+    esValido = false;
+  }
+
+  // Validar email
+  if (!email || !email.includes('@')) {
+    document.getElementById('errorEmail').textContent = 'Debe contener "@" y no puede estar vacío.';
+    esValido = false;
+  }
+
+  // Validar redes sociales
+  if (!redes) {
+    document.getElementById('errorRedes').textContent = 'Este campo no puede estar vacío.';
+    esValido = false;
+  }
+
+  return esValido;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const formulario = document.querySelector("form");
+  const generoSelect = document.getElementById("input_genero");
+
+  formulario.addEventListener("submit", function (event) {
+    if (generoSelect.value === "") {
+      alert("Por favor, seleccione un género.");
+      generoSelect.classList.add("is-invalid"); // clase de Bootstrap para resaltar error
+      event.preventDefault(); // evita que se envíe el formulario
+    } else {
+      generoSelect.classList.remove("is-invalid");
+      generoSelect.classList.add("is-valid");
     }
-  
-    // Listar tipos de proyecto (GET)
-    btnListar.addEventListener('click', async () => {
-      try {
-        const response = await fetch(baseUrl);
-        const data = await response.json();
-        showResponse(response.status, data);
-      } catch (error) {
-        showResponse(500, { error: error.message });
-      }
-    });
-  
-    // Crear tipo de proyecto (POST)
-    btnCrear.addEventListener('click', async () => {
-      if (!validarCampos("POST")) return;
-  
-      const formData = new FormData(proyectoForm);
-      const tipoProyecto = {
-        codigo: formData.get('codigo'),
-        descripcion: formData.get('descripcion'),
-        abreviatura: formData.get('abreviatura'),
-        fecha_registro: formData.get('fecha_registro')
-      };
-  
-      try {
-        const response = await fetch(baseUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(tipoProyecto)
-        });
-        const data = await response.json();
-        showResponse(response.status, data);
-      } catch (error) {
-        showResponse(500, { error: error.message });
-      }
-    });
-  
-    // Actualizar tipo de proyecto (PUT)
-    btnActualizar.addEventListener('click', async () => {
-      if (!validarCampos()) return;
-  
-      const formData = new FormData(proyectoForm);
-      const id = formData.get('id');
-  
-      if (!id) {
-        showResponse(400, { error: 'Se requiere un ID para actualizar' });
-        return;
-      }
-  
-      const tipoProyecto = {
-        id: formData.get('id'),
-        codigo: formData.get('codigo'),
-        descripcion: formData.get('descripcion'),
-        abreviatura: formData.get('abreviatura'),
-        fecha_registro: formData.get('fecha_registro')
-      };
-  
-      try {
-        const response = await fetch(`${baseUrl}/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(tipoProyecto)
-        });
-        const data = await response.json();
-        showResponse(response.status, data);
-      } catch (error) {
-        showResponse(500, { error: error.message });
-      }
-    });
-  
-    // Eliminar tipo de proyecto (DELETE)
-    btnEliminar.addEventListener('click', async () => {
-      const id = document.getElementById('id').value;
-  
-      if (!id) {
-        showResponse(400, { error: 'Se requiere un ID para eliminar' });
-        return;
-      }
-  
-      if (!confirm('¿Está seguro de eliminar este tipo de proyecto?')) return;
-  
-      try {
-        const response = await fetch(`${baseUrl}/${id}`, {
-          method: 'DELETE'
-        });
-        const data = await response.json();
-        showResponse(response.status, data);
-      } catch (error) {
-        showResponse(500, { error: error.message });
-      }
-    });
-  
-    // Menú lateral
-    const toggleBtn = document.getElementById('toggle-menu');
-    const menu = document.querySelector('.container2');
-  
-    toggleBtn.addEventListener('click', () => {
-      menu.classList.toggle('active');
-    });
   });
-  
+});
